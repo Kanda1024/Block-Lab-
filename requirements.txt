@@ -1,0 +1,6 @@
+#usage: $ pip install -r requirements.txt
+
+### Requirements without Version Specifiers ###
+
+### Requirements with Version Specifiers ###
+pygame == 2.4.0
