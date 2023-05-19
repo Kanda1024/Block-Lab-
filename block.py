@@ -5,23 +5,22 @@ import copy
 import pygame
 from pygame.locals import *
 
-
 #定数
 WINDOW_SIZE_X = 480             #画面横サイズ
 WINDOW_SIZE_Y = 640             #画面縦サイズ
-BAR_SIZE_X = 100                #バー横サイズ
+BAR_SIZE_X = 150                #バー横サイズ
 BAR_SIZE_Y = 10                 #バー縦サイズ
 BAR_Y = WINDOW_SIZE_Y * 0.9     #バー縦位置
+BAR_SPEED = 10                  #バーの横移動速度
 BALL_SIZE = 18                  #ボールサイズ
 BALL_SPEED = 10                 #ボール移動速度
 BLOCK_SIZE_X = 60               #ブロック横サイズ
 BLOCK_SIZE_Y = 30               #ブロック縦サイズ
-BLOCK_NUM_X = 8                #ブロック横列の数
+BLOCK_NUM_X = 8                 #ブロック横列の数
 BLOCK_NUM_Y = 5                 #ブロック縦列の数
 BLOCK_BLANK = 0                 #ブロック間余白
 FRAME_RATE = 50                 #フレームレート
 KEY_REPEAT = 20                 #キーリピート間隔
-
 
 #画面定義
 SURFACE = Rect(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y)
@@ -39,9 +38,10 @@ class Bar(pygame.sprite.Sprite):
     def update(self, bar_x):
         #バーの位置
         self.rect.centerx = bar_x
-        self.rect.centery = BAR_Y 
+        self.rect.centery = BAR_Y
+
         #画面内に収める
-        self.rect.clamp_ip(SURFACE)
+        #self.rect.clamp_ip(SURFACE)
     #バーの描画
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -91,17 +91,19 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.top <= SURFACE.top:
             self.rect.top = SURFACE.top
             self.vy *= -1
-
         #ボールとバーの当たり判定
         if self.rect.colliderect(self.bar.rect):
             self.sound_bar.play(0)
+            self.rect.centery = self.bar.rect.top
             self.vy *= -1
+        
         #ゲーム失敗判定
         if self.rect.bottom >= SURFACE.bottom:
             ### GAME OVERを表示
             font = pygame.font.Font(None, 60)
             text = font.render("GAME OVER", True, (255,31,31))
             surface.blit(text, [73,299])
+
         ### ブロック接触リスト取得(接触したブロックは削除)
         block_list = pygame.sprite.spritecollide(self, self.block, True)
 
@@ -143,7 +145,7 @@ class Ball(pygame.sprite.Sprite):
                 time.sleep(20)
     #ボールの描画
     def draw(self, surface):
-            surface.blit(self.image, self.rect)
+        surface.blit(self.image, self.rect)
 
 
 class Block(pygame.sprite.Sprite):
@@ -159,7 +161,7 @@ class Block(pygame.sprite.Sprite):
     
     #ブロックの描画
     def draw(self, surface):
-            surface.blit(self.image2, self.rect)
+        surface.blit(self.image, self.rect)
 
 
 def main():
@@ -222,13 +224,13 @@ def main():
                 
                 if event.key == K_LEFT:
                     #左に移動
-                    bar_pos -= 10
+                    bar_pos -= BAR_SPEED
                     #画面外処理(左端)
                     if bar_pos - BAR_SIZE_X/2 < 0:
                         bar_pos = 0 + BAR_SIZE_X/2
                 if event.key == K_RIGHT:
                     #右に移動
-                    bar_pos += 10
+                    bar_pos += BAR_SPEED
                     #画面外処理(右端)
                     if bar_pos + BAR_SIZE_X/2 > WINDOW_SIZE_X:
                         bar_pos = WINDOW_SIZE_X - BAR_SIZE_X/2
