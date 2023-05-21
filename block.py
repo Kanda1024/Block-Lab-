@@ -5,23 +5,7 @@ import copy
 import pygame
 from pygame.locals import *
 from game_class import *
-
-#定数
-WINDOW_SIZE_X = 480             #画面横サイズ
-WINDOW_SIZE_Y = 640             #画面縦サイズ
-BAR_SIZE_X = 150                #バー横サイズ
-BAR_SIZE_Y = 10                 #バー縦サイズ
-BAR_Y = WINDOW_SIZE_Y * 0.9     #バー縦位置
-BAR_SPEED = 10                  #バーの横移動速度
-BALL_SIZE = 18                  #ボールサイズ
-BALL_SPEED = 10                 #ボール移動速度
-BLOCK_SIZE_X = 60               #ブロック横サイズ
-BLOCK_SIZE_Y = 30               #ブロック縦サイズ
-BLOCK_NUM_X = 8                 #ブロック横列の数
-BLOCK_NUM_Y = 5                 #ブロック縦列の数
-BLOCK_BLANK = 0                 #ブロック間余白
-FRAME_RATE = 50                 #フレームレート
-KEY_REPEAT = 20                 #キーリピート間隔
+from const import *
 
 #画面定義
 SURFACE = Rect(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y)
@@ -38,7 +22,8 @@ for y in range(BLOCK_NUM_Y):
         blocks.add(Block("./image/block.png", x, y))
 
 bar = Bar("./image/bar.png")
-ball = Ball("./image/ball.png", bar, blocks)
+ball = Ball("./image/ball01_red.png", bar, blocks)
+screen = Screen("./image/bg_natural_sougen.jpg")
 
 clock = pygame.time.Clock()
 bar_pos = WINDOW_SIZE_X/2
@@ -48,14 +33,13 @@ bar_pos = WINDOW_SIZE_X/2
 def gameInit():
     pygame.init()
     pygame.display.set_caption("ブロック崩し")
-    pygame.mixer.music.load("./sound/audio.mp3")
+    pygame.mixer.music.load("./sound/maou_bgm_8bit18.mp3")
     pygame.mixer.music.play(1)
     pygame.key.set_repeat(KEY_REPEAT)
 
-
 #描画関数
 def Draw():
-    surface.fill((0,0,0))
+    screen.draw(surface)
     bar.draw(surface)
     ball.draw(surface)
     blocks.draw(surface)
@@ -66,8 +50,8 @@ def keyInput(key):
     if key == K_ESCAPE:
         exit()     
 
+#文字列表示
 def drawString(str):
-    ### STARTを表示
     font = pygame.font.Font(None, 60)
     text = font.render(str, True, (96,96,255))
     surface.fill((0,0,0))

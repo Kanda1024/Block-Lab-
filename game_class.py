@@ -4,24 +4,20 @@ import time
 import copy
 import pygame
 from pygame.locals import *
+from const import *
 
-#定数
-WINDOW_SIZE_X = 480             #画面横サイズ
-WINDOW_SIZE_Y = 640             #画面縦サイズ
-BAR_SIZE_X = 150                #バー横サイズ
-BAR_SIZE_Y = 10                 #バー縦サイズ
-BAR_Y = WINDOW_SIZE_Y * 0.9     #バー縦位置
-BAR_SPEED = 10                  #バーの横移動速度
-BALL_SIZE = 18                  #ボールサイズ
-BALL_SPEED = 10                 #ボール移動速度
-BLOCK_SIZE_X = 60               #ブロック横サイズ
-BLOCK_SIZE_Y = 30               #ブロック縦サイズ
-BLOCK_NUM_X = 8                 #ブロック横列の数
-BLOCK_NUM_Y = 5                 #ブロック縦列の数
-BLOCK_BLANK = 0                 #ブロック間余白
-FRAME_RATE = 50                 #フレームレート
-KEY_REPEAT = 20                 #キーリピート間隔
 
+#スクリーンクラス
+class Screen(pygame.sprite.Sprite):
+    #初期化メソッド
+    def __init__(self, image_name):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image_name).convert()
+        self.image = pygame.transform.scale(self.image, (WINDOW_SIZE_X, WINDOW_SIZE_Y))
+        self.rect = self.image.get_rect()
+    #スクリーンの描画
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
 
 #バークラス
 class Bar(pygame.sprite.Sprite):
@@ -37,9 +33,7 @@ class Bar(pygame.sprite.Sprite):
         #バーの位置
         self.rect.centerx = bar_x
         self.rect.centery = BAR_Y
-
-        #画面内に収める
-        #self.rect.clamp_ip(SURFACE)
+        
     #バーの描画
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -56,8 +50,8 @@ class Ball(pygame.sprite.Sprite):
         self.sound_bar = pygame.mixer.Sound("./sound/maou_se_system41.wav")
         self.sound_block = pygame.mixer.Sound("./sound/maou_se_system35.wav")
     
-        self.vx = 0               #ボール横速度
-        self.vy = 0               #ボール縦速度
+        self.vx = 0                 #ボール横速度
+        self.vy = 0                  #ボール縦速度
         self.bar = bar              #バーを参照
         self.block  = block         #ブロックを参照
         self.update = self.setup    #初期状態
@@ -146,7 +140,7 @@ class Ball(pygame.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
-
+#ブロッククラス
 class Block(pygame.sprite.Sprite):
     #初期化メソッド
     def __init__(self, image_name, x, y):
@@ -155,8 +149,8 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (BLOCK_SIZE_X, BLOCK_SIZE_Y))
         self.rect = self.image.get_rect()
         #ブロック位置の取得
-        self.rect.left = x * (self.rect.width + BLOCK_BLANK)
-        self.rect.top  = y * (self.rect.height + BLOCK_BLANK)
+        self.rect.left = x * (self.rect.width + BLOCK_BLANK) + BLOCK_BLANK_LEFT
+        self.rect.top  = y * (self.rect.height + BLOCK_BLANK) + BLOCK_BLANK_TOP
     
     #ブロックの描画
     def draw(self, surface):
