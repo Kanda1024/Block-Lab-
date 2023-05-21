@@ -1,8 +1,9 @@
 # How To Use
 
 ## How to Clone this Repository
+$ 
 ```
-$ git clone https://github.com/Kanda1024/Block-breaker-Lab.git
+git clone https://github.com/Kanda1024/Block-breaker-Lab.git
 ```
 
 
