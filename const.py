@@ -1,7 +1,7 @@
 #定数の定義
 WINDOW_SIZE_X = 480             #画面横サイズ
 WINDOW_SIZE_Y = 640             #画面縦サイズ
-BAR_SIZE_X = 150                #バー横サイズ
+BAR_SIZE_X = 300                #バー横サイズ
 BAR_SIZE_Y = 10                 #バー縦サイズ
 BAR_Y = WINDOW_SIZE_Y * 0.9     #バー縦位置
 BAR_SPEED = 10                  #バーの横移動速度
