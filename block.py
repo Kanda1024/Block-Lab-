@@ -16,10 +16,20 @@ pygame.mixer.init()
 
 #インスタンス生成
 blocks = pygame.sprite.Group()
+block_color = [""]
+
+#ブロックの配置(BLOCK_NUM_X * BLOCK_NUM_Y)
+stage = [[5,5,5,5,5,5,5,5,5,5],
+         [5,0,0,0,0,0,0,0,0,5],
+         [5,0,2,3,2,3,2,3,0,5],
+         [5,0,0,0,0,0,0,0,0,5],
+         [5,5,5,5,5,5,5,5,5,5]]
 
 for y in range(BLOCK_NUM_Y):
     for x in range(BLOCK_NUM_X):
-        blocks.add(Block("./image/block.png", x, y))
+        if stage[y][x] != 0:
+            path = "./image/block" + str(stage[y][x]) + ".png"
+            blocks.add(Block(path, x, y))
 
 bar = Bar("./image/bar.png")
 ball = Ball("./image/ball01_red.png", bar, blocks)
@@ -49,6 +59,8 @@ def Draw():
 def keyInput(key):
     if key == K_ESCAPE:
         exit()     
+    if key == K_w:
+        ball.ballSpeed()
 
 #文字列表示
 def drawString(str):

@@ -140,6 +140,9 @@ class Ball(pygame.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
+    def ballSpeed(self):
+        self.vx += 1
+
 #ブロッククラス
 class Block(pygame.sprite.Sprite):
     #初期化メソッド
